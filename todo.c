@@ -57,15 +57,16 @@ int main() {
     lf_next_line();
     {
       const uint32_t numfilters = 6;
-
       static const char *filters[] = {"all", "in progress", "completed",
                                       "low", "medium",      "high"};
-      for (uint32_t i = 0; i < numfilters; i++) {
-        LfUIElementProps props = lf_get_theme().text_props;
-        props.margin_top = 20.0f;
-        props.margin_right = 30.0f;
-        lf_push_style_props(props);
+      LfUIElementProps props = lf_get_theme().text_props;
+      props.margin_top = 20.0f;
+      props.margin_right = 30.0f;
 
+      float width = 0.0f;
+      float ptrx_before = lf_get_ptr_x();
+      for (uint32_t i = 0; i < numfilters; i++) {
+        lf_push_style_props(props);
         lf_button(filters[i]);
         lf_pop_style_props();
       }
