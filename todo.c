@@ -1,6 +1,7 @@
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <leif/leif.h>
+#include <stdint.h>
 
 #define WIN_MARGIN 20.0f
 
@@ -65,14 +66,20 @@ int main() {
 
       float width = 0.0f;
       float ptrx_before = lf_get_ptr_x();
+      lf_push_style_props(props);
+      lf_set_no_render(true);
+      for (uint32_t i = 0; i < numfilters; i++) {
+        lf_button(filters[i]);
+      }
+
+      lf_set_no_render(false);
+      width = lf_get_ptr_x() - ptrx_before - props.margin_right - props.padding;
       for (uint32_t i = 0; i < numfilters; i++) {
         lf_push_style_props(props);
         lf_button(filters[i]);
         lf_pop_style_props();
       }
     }
-
-    lf_pop_font();
 
     lf_div_end();
     lf_end();
