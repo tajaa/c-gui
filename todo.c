@@ -2,11 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <leif/leif.h>
 #include <stdint.h>
-
+typedef enum { all = 0, in_progress, low, medium, high } entry_filter;
 #define WIN_MARGIN 20.0f
 
 static int winw = 1280, winh = 720;
 static LfFont titlefont;
+static entry_filter current_filter;
 
 static void rendertopbar() {
   lf_push_font(&titlefont);
@@ -74,11 +75,21 @@ int main() {
 
       lf_set_no_render(false);
       width = lf_get_ptr_x() - ptrx_before - props.margin_right - props.padding;
+
+      lf_set_ptr_x_absolute(winw - width - WIN_MARGIN);
+
+      lf_set_line_should_overflow(false);
       for (uint32_t i = 0; i < numfilters; i++) {
+        props.color =
+            (current_filter == i) ? (LfColor){120, 120, 120, 255} : LF_NO_COLOR;
+
         lf_push_style_props(props);
-        lf_button(filters[i]);
+        if (lf_button(filters[i]) == LF_CLICKED) {
+          current_filter = (entry_filter)i;
+        }
         lf_pop_style_props();
       }
+      lf_set_line_should_overflow(true);
     }
 
     lf_div_end();
